@@ -2,6 +2,7 @@
   "name": "sistema-recomendacion-ia",
   "version": "1.0.0",
   "description": "Sistema de Recomendación con IA",
+  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
