@@ -1,0 +1,132 @@
+// src/utils/productos.js
+
+export const PRODUCTOS = [
+  // ELECTRÓNICA (20 productos)
+  { id: 1, nombre: 'Laptop Gaming ROG', categoria: 'Electrónica', precio: 1500, tags: ['gaming', 'computadora', 'alto_rendimiento'], imagen: 'laptop-gaming-1.jpg' },
+  { id: 2, nombre: 'Laptop MacBook Pro', categoria: 'Electrónica', precio: 2200, tags: ['profesional', 'apple', 'diseño'], imagen: 'laptop-macbook.jpg' },
+  { id: 3, nombre: 'Laptop Dell XPS', categoria: 'Electrónica', precio: 1800, tags: ['profesional', 'portátil', 'trabajo'], imagen: 'laptop-dell.jpg' },
+  { id: 4, nombre: 'PC Gaming RGB', categoria: 'Electrónica', precio: 2000, tags: ['gaming', 'escritorio', 'rgb'], imagen: 'pc-gaming.jpg' },
+  { id: 5, nombre: 'iMac 27 pulgadas', categoria: 'Electrónica', precio: 2500, tags: ['apple', 'todo_en_uno', 'profesional'], imagen: 'imac.jpg' },
+  { id: 6, nombre: 'Smartphone iPhone 15', categoria: 'Electrónica', precio: 1200, tags: ['teléfono', 'apple', 'premium'], imagen: 'iphone-15.jpg' },
+  { id: 7, nombre: 'Smartphone Samsung S24', categoria: 'Electrónica', precio: 1100, tags: ['teléfono', 'android', 'premium'], imagen: 'samsung-s24.jpg' },
+  { id: 8, nombre: 'Smartphone Xiaomi 14', categoria: 'Electrónica', precio: 800, tags: ['teléfono', 'android', 'económico'], imagen: 'xiaomi-14.jpg' },
+  { id: 9, nombre: 'Tablet iPad Pro', categoria: 'Electrónica', precio: 1000, tags: ['tablet', 'apple', 'profesional'], imagen: 'ipad-pro.jpg' },
+  { id: 10, nombre: 'Tablet Samsung Galaxy Tab', categoria: 'Electrónica', precio: 600, tags: ['tablet', 'android', 'portátil'], imagen: 'galaxy-tab.jpg' },
+  { id: 11, nombre: 'Monitor Gaming 144Hz', categoria: 'Electrónica', precio: 450, tags: ['monitor', 'gaming', 'alto_rendimiento'], imagen: 'monitor-gaming.jpg' },
+  { id: 12, nombre: 'Monitor 4K Profesional', categoria: 'Electrónica', precio: 700, tags: ['monitor', '4k', 'profesional'], imagen: 'monitor-4k.jpg' },
+  { id: 13, nombre: 'Monitor Ultrawide 34"', categoria: 'Electrónica', precio: 800, tags: ['monitor', 'ultrawide', 'productividad'], imagen: 'monitor-ultrawide.jpg' },
+  { id: 14, nombre: 'Webcam Logitech 4K', categoria: 'Electrónica', precio: 150, tags: ['webcam', 'streaming', '4k'], imagen: 'webcam-4k.jpg' },
+  { id: 15, nombre: 'Webcam Básica HD', categoria: 'Electrónica', precio: 40, tags: ['webcam', 'básico', 'videollamadas'], imagen: 'webcam-hd.jpg' },
+  { id: 16, nombre: 'Proyector Home Cinema', categoria: 'Electrónica', precio: 800, tags: ['proyector', 'cine', 'entretenimiento'], imagen: 'proyector-cinema.jpg' },
+  { id: 17, nombre: 'Proyector Portátil', categoria: 'Electrónica', precio: 300, tags: ['proyector', 'portátil', 'viajes'], imagen: 'proyector-portatil.jpg' },
+  { id: 18, nombre: 'Smartwatch Apple Watch', categoria: 'Electrónica', precio: 500, tags: ['smartwatch', 'apple', 'fitness'], imagen: 'apple-watch.jpg' },
+  { id: 19, nombre: 'Smartwatch Samsung Galaxy', categoria: 'Electrónica', precio: 350, tags: ['smartwatch', 'samsung', 'fitness'], imagen: 'galaxy-watch.jpg' },
+  { id: 20, nombre: 'Smartwatch Xiaomi Band', categoria: 'Electrónica', precio: 50, tags: ['smartwatch', 'económico', 'fitness'], imagen: 'xiaomi-band.jpg' },
+
+  // PERIFÉRICOS (20 productos)
+  { id: 21, nombre: 'Mouse Gaming Razer', categoria: 'Periféricos', precio: 80, tags: ['mouse', 'gaming', 'rgb'], imagen: 'mouse-razer.jpg' },
+  { id: 22, nombre: 'Mouse Logitech MX Master', categoria: 'Periféricos', precio: 100, tags: ['mouse', 'profesional', 'ergonómico'], imagen: 'mouse-logitech.jpg' },
+  { id: 23, nombre: 'Mouse Inalámbrico Básico', categoria: 'Periféricos', precio: 25, tags: ['mouse', 'inalámbrico', 'económico'], imagen: 'mouse-basico.jpg' },
+  { id: 24, nombre: 'Teclado Mecánico RGB', categoria: 'Periféricos', precio: 120, tags: ['teclado', 'mecánico', 'gaming'], imagen: 'teclado-mecanico.jpg' },
+  { id: 25, nombre: 'Teclado Apple Magic', categoria: 'Periféricos', precio: 150, tags: ['teclado', 'apple', 'profesional'], imagen: 'teclado-apple.jpg' },
+  { id: 26, nombre: 'Teclado Ergonómico', categoria: 'Periféricos', precio: 90, tags: ['teclado', 'ergonómico', 'salud'], imagen: 'teclado-ergonomico.jpg' },
+  { id: 27, nombre: 'Mousepad RGB XXL', categoria: 'Periféricos', precio: 35, tags: ['mousepad', 'gaming', 'rgb'], imagen: 'mousepad-rgb.jpg' },
+  { id: 28, nombre: 'Mousepad Cuero Premium', categoria: 'Periféricos', precio: 45, tags: ['mousepad', 'premium', 'profesional'], imagen: 'mousepad-cuero.jpg' },
+  { id: 29, nombre: 'Hub USB-C 7 en 1', categoria: 'Periféricos', precio: 60, tags: ['hub', 'conectividad', 'usb-c'], imagen: 'hub-usbc.jpg' },
+  { id: 30, nombre: 'Hub USB 3.0', categoria: 'Periféricos', precio: 30, tags: ['hub', 'usb', 'básico'], imagen: 'hub-usb.jpg' },
+  { id: 31, nombre: 'Cable HDMI 2.1 Premium', categoria: 'Periféricos', precio: 25, tags: ['cable', 'hdmi', '4k'], imagen: 'cable-hdmi.jpg' },
+  { id: 32, nombre: 'Cable USB-C Magnético', categoria: 'Periféricos', precio: 20, tags: ['cable', 'usb-c', 'magnético'], imagen: 'cable-usbc.jpg' },
+  { id: 33, nombre: 'Soporte Laptop Aluminio', categoria: 'Periféricos', precio: 50, tags: ['soporte', 'ergonómico', 'aluminio'], imagen: 'soporte-laptop.jpg' },
+  { id: 34, nombre: 'Soporte Monitor Dual', categoria: 'Periféricos', precio: 80, tags: ['soporte', 'monitor', 'dual'], imagen: 'soporte-monitor.jpg' },
+  { id: 35, nombre: 'Webcam Cover Pack 6', categoria: 'Periféricos', precio: 10, tags: ['privacidad', 'webcam', 'seguridad'], imagen: 'webcam-cover.jpg' },
+  { id: 36, nombre: 'Limpiador Pantallas Kit', categoria: 'Periféricos', precio: 15, tags: ['limpieza', 'mantenimiento', 'kit'], imagen: 'limpiador-pantalla.jpg' },
+  { id: 37, nombre: 'Organizador Cables', categoria: 'Periféricos', precio: 12, tags: ['organización', 'cables', 'escritorio'], imagen: 'organizador-cables.jpg' },
+  { id: 38, nombre: 'Regleta Enchufes USB', categoria: 'Periféricos', precio: 40, tags: ['regleta', 'enchufes', 'usb'], imagen: 'regleta-usb.jpg' },
+  { id: 39, nombre: 'Cargador Inalámbrico', categoria: 'Periféricos', precio: 35, tags: ['cargador', 'inalámbrico', 'qi'], imagen: 'cargador-inalambrico.jpg' },
+  { id: 40, nombre: 'Batería Externa 20000mAh', categoria: 'Periféricos', precio: 45, tags: ['batería', 'portátil', 'carga_rápida'], imagen: 'bateria-externa.jpg' },
+
+  // AUDIO (15 productos)
+  { id: 41, nombre: 'Auriculares Sony WH-1000XM5', categoria: 'Audio', precio: 350, tags: ['auriculares', 'premium', 'noise_cancelling'], imagen: 'auriculares-sony.jpg' },
+  { id: 42, nombre: 'Auriculares AirPods Pro', categoria: 'Audio', precio: 250, tags: ['auriculares', 'apple', 'inalámbrico'], imagen: 'airpods-pro.jpg' },
+  { id: 43, nombre: 'Auriculares Gaming HyperX', categoria: 'Audio', precio: 100, tags: ['auriculares', 'gaming', 'micrófono'], imagen: 'auriculares-gaming.jpg' },
+  { id: 44, nombre: 'Audífonos Bluetooth JBL', categoria: 'Audio', precio: 80, tags: ['audífonos', 'deportes', 'resistente'], imagen: 'audifonos-jbl.jpg' },
+  { id: 45, nombre: 'Micrófono Blue Yeti', categoria: 'Audio', precio: 150, tags: ['micrófono', 'streaming', 'profesional'], imagen: 'microfono-yeti.jpg' },
+  { id: 46, nombre: 'Micrófono Rode NT-USB', categoria: 'Audio', precio: 180, tags: ['micrófono', 'podcast', 'usb'], imagen: 'microfono-rode.jpg' },
+  { id: 47, nombre: 'Micrófono Solapa Lavalier', categoria: 'Audio', precio: 30, tags: ['micrófono', 'lavalier', 'portátil'], imagen: 'microfono-lavalier.jpg' },
+  { id: 48, nombre: 'Altavoces Bluetooth Bose', categoria: 'Audio', precio: 200, tags: ['altavoces', 'bluetooth', 'premium'], imagen: 'altavoces-bose.jpg' },
+  { id: 49, nombre: 'Altavoces Gaming RGB', categoria: 'Audio', precio: 60, tags: ['altavoces', 'gaming', 'rgb'], imagen: 'altavoces-gaming.jpg' },
+  { id: 50, nombre: 'Soundbar Samsung', categoria: 'Audio', precio: 300, tags: ['soundbar', 'home_theater', 'tv'], imagen: 'soundbar.jpg' },
+  { id: 51, nombre: 'Interfaz Audio Focusrite', categoria: 'Audio', precio: 180, tags: ['interfaz', 'audio', 'producción'], imagen: 'interfaz-audio.jpg' },
+  { id: 52, nombre: 'Mezcladora DJ Numark', categoria: 'Audio', precio: 250, tags: ['mezcladora', 'dj', 'profesional'], imagen: 'mezcladora-dj.jpg' },
+  { id: 53, nombre: 'Auriculares Studio Monitor', categoria: 'Audio', precio: 120, tags: ['auriculares', 'studio', 'producción'], imagen: 'auriculares-studio.jpg' },
+  { id: 54, nombre: 'Amplificador Audio', categoria: 'Audio', precio: 150, tags: ['amplificador', 'audio', 'hifi'], imagen: 'amplificador.jpg' },
+  { id: 55, nombre: 'Ecualizador Gráfico', categoria: 'Audio', precio: 100, tags: ['ecualizador', 'audio', 'profesional'], imagen: 'ecualizador.jpg' },
+
+  // ALMACENAMIENTO (10 productos)
+  { id: 56, nombre: 'SSD Samsung 1TB NVMe', categoria: 'Almacenamiento', precio: 120, tags: ['ssd', 'nvme', 'velocidad'], imagen: 'ssd-samsung-1tb.jpg' },
+  { id: 57, nombre: 'SSD Kingston 2TB', categoria: 'Almacenamiento', precio: 200, tags: ['ssd', 'almacenamiento', '2tb'], imagen: 'ssd-kingston-2tb.jpg' },
+  { id: 58, nombre: 'SSD Externo Portátil 1TB', categoria: 'Almacenamiento', precio: 150, tags: ['ssd', 'externo', 'portátil'], imagen: 'ssd-externo.jpg' },
+  { id: 59, nombre: 'Disco Duro 4TB Seagate', categoria: 'Almacenamiento', precio: 100, tags: ['hdd', 'almacenamiento', '4tb'], imagen: 'hdd-4tb.jpg' },
+  { id: 60, nombre: 'Disco Duro Externo 2TB', categoria: 'Almacenamiento', precio: 80, tags: ['hdd', 'externo', '2tb'], imagen: 'hdd-externo-2tb.jpg' },
+  { id: 61, nombre: 'NAS Synology 2 Bahías', categoria: 'Almacenamiento', precio: 300, tags: ['nas', 'servidor', 'red'], imagen: 'nas-synology.jpg' },
+  { id: 62, nombre: 'Memoria RAM 16GB DDR4', categoria: 'Almacenamiento', precio: 60, tags: ['ram', 'memoria', 'ddr4'], imagen: 'ram-16gb.jpg' },
+  { id: 63, nombre: 'Memoria RAM 32GB DDR5', categoria: 'Almacenamiento', precio: 150, tags: ['ram', 'memoria', 'ddr5'], imagen: 'ram-32gb.jpg' },
+  { id: 64, nombre: 'Tarjeta SD 128GB', categoria: 'Almacenamiento', precio: 25, tags: ['sd', 'memoria', 'fotografía'], imagen: 'tarjeta-sd-128gb.jpg' },
+  { id: 65, nombre: 'USB Flash Drive 256GB', categoria: 'Almacenamiento', precio: 40, tags: ['usb', 'flash', 'portátil'], imagen: 'usb-256gb.jpg' },
+
+  // MUEBLES Y ERGONOMÍA (10 productos)
+  { id: 66, nombre: 'Silla Gaming DXRacer', categoria: 'Muebles', precio: 400, tags: ['silla', 'gaming', 'ergonómico'], imagen: 'silla-dxracer.jpg' },
+  { id: 67, nombre: 'Silla Oficina Herman Miller', categoria: 'Muebles', precio: 800, tags: ['silla', 'premium', 'ergonómico'], imagen: 'silla-herman-miller.jpg' },
+  { id: 68, nombre: 'Silla Ergonómica Mesh', categoria: 'Muebles', precio: 250, tags: ['silla', 'ergonómico', 'oficina'], imagen: 'silla-mesh.jpg' },
+  { id: 69, nombre: 'Escritorio Gaming RGB', categoria: 'Muebles', precio: 350, tags: ['escritorio', 'gaming', 'rgb'], imagen: 'escritorio-gaming.jpg' },
+  { id: 70, nombre: 'Escritorio Regulable Altura', categoria: 'Muebles', precio: 500, tags: ['escritorio', 'ergonómico', 'regulable'], imagen: 'escritorio-regulable.jpg' },
+  { id: 71, nombre: 'Escritorio Minimalista', categoria: 'Muebles', precio: 200, tags: ['escritorio', 'minimalista', 'moderno'], imagen: 'escritorio-minimalista.jpg' },
+  { id: 72, nombre: 'Mesa de Dibujo Inclinable', categoria: 'Muebles', precio: 300, tags: ['mesa', 'dibujo', 'arte'], imagen: 'mesa-dibujo.jpg' },
+  { id: 73, nombre: 'Reposapiés Ergonómico', categoria: 'Muebles', precio: 40, tags: ['reposapiés', 'ergonómico', 'confort'], imagen: 'reposapiés.jpg' },
+  { id: 74, nombre: 'Cojín Lumbar Memoria', categoria: 'Muebles', precio: 35, tags: ['cojín', 'lumbar', 'ergonómico'], imagen: 'cojin-lumbar.jpg' },
+  { id: 75, nombre: 'Alfombra Silla Oficina', categoria: 'Muebles', precio: 50, tags: ['alfombra', 'protección', 'oficina'], imagen: 'alfombra-silla.jpg' },
+
+  // ILUMINACIÓN (10 productos)
+  { id: 76, nombre: 'Lámpara LED Escritorio', categoria: 'Iluminación', precio: 45, tags: ['lámpara', 'led', 'escritorio'], imagen: 'lampara-escritorio.jpg' },
+  { id: 77, nombre: 'Tira LED RGB 5m', categoria: 'Iluminación', precio: 30, tags: ['led', 'rgb', 'gaming'], imagen: 'tira-led-rgb.jpg' },
+  { id: 78, nombre: 'Panel LED Hexagonal', categoria: 'Iluminación', precio: 80, tags: ['panel', 'led', 'decoración'], imagen: 'panel-hexagonal.jpg' },
+  { id: 79, nombre: 'Aro de Luz Streaming', categoria: 'Iluminación', precio: 60, tags: ['aro_luz', 'streaming', 'fotografía'], imagen: 'aro-luz.jpg' },
+  { id: 80, nombre: 'Softbox Kit Fotografía', categoria: 'Iluminación', precio: 100, tags: ['softbox', 'fotografía', 'profesional'], imagen: 'softbox.jpg' },
+  { id: 81, nombre: 'Luz LED Portátil Video', categoria: 'Iluminación', precio: 50, tags: ['luz', 'portátil', 'video'], imagen: 'luz-video.jpg' },
+  { id: 82, nombre: 'Bombillas Smart WiFi Pack', categoria: 'Iluminación', precio: 40, tags: ['bombilla', 'smart', 'wifi'], imagen: 'bombillas-smart.jpg' },
+  { id: 83, nombre: 'Lámpara Neon Personalizada', categoria: 'Iluminación', precio: 120, tags: ['neon', 'decoración', 'personalizada'], imagen: 'lampara-neon.jpg' },
+  { id: 84, nombre: 'Proyector Estrellas LED', categoria: 'Iluminación', precio: 35, tags: ['proyector', 'estrellas', 'ambiente'], imagen: 'proyector-estrellas.jpg' },
+  { id: 85, nombre: 'Lámpara Sal Himalaya', categoria: 'Iluminación', precio: 25, tags: ['lámpara', 'sal', 'natural'], imagen: 'lampara-sal.jpg' },
+
+  // CÁMARAS Y FOTOGRAFÍA (10 productos)
+  { id: 86, nombre: 'Cámara Canon EOS R6', categoria: 'Fotografía', precio: 2500, tags: ['cámara', 'profesional', 'mirrorless'], imagen: 'canon-r6.jpg' },
+  { id: 87, nombre: 'Cámara Sony A7 IV', categoria: 'Fotografía', precio: 2800, tags: ['cámara', 'profesional', 'fullframe'], imagen: 'sony-a7iv.jpg' },
+  { id: 88, nombre: 'Cámara GoPro Hero 12', categoria: 'Fotografía', precio: 500, tags: ['cámara', 'acción', 'deportes'], imagen: 'gopro-12.jpg' },
+  { id: 89, nombre: 'Cámara Instantánea Fujifilm', categoria: 'Fotografía', precio: 100, tags: ['cámara', 'instantánea', 'retro'], imagen: 'fujifilm-instax.jpg' },
+  { id: 90, nombre: 'Lente Canon 50mm f/1.8', categoria: 'Fotografía', precio: 150, tags: ['lente', 'canon', 'retrato'], imagen: 'lente-50mm.jpg' },
+  { id: 91, nombre: 'Lente Sony 24-70mm', categoria: 'Fotografía', precio: 900, tags: ['lente', 'sony', 'versátil'], imagen: 'lente-24-70mm.jpg' },
+  { id: 92, nombre: 'Trípode Profesional Carbono', categoria: 'Fotografía', precio: 200, tags: ['trípode', 'profesional', 'carbono'], imagen: 'tripode-carbono.jpg' },
+  { id: 93, nombre: 'Gimbal Estabilizador DJI', categoria: 'Fotografía', precio: 350, tags: ['gimbal', 'estabilizador', 'video'], imagen: 'gimbal-dji.jpg' },
+  { id: 94, nombre: 'Drone DJI Mini 3 Pro', categoria: 'Fotografía', precio: 800, tags: ['drone', 'fotografía', 'video'], imagen: 'drone-mini3.jpg' },
+  { id: 95, nombre: 'Filtros ND Pack Fotografía', categoria: 'Fotografía', precio: 80, tags: ['filtros', 'nd', 'fotografía'], imagen: 'filtros-nd.jpg' },
+
+  // STREAMING Y CONTENT CREATION (5 productos)
+  { id: 96, nombre: 'Elgato Stream Deck', categoria: 'Streaming', precio: 150, tags: ['stream_deck', 'streaming', 'control'], imagen: 'stream-deck.jpg' },
+  { id: 97, nombre: 'Capturadora Elgato HD60', categoria: 'Streaming', precio: 180, tags: ['capturadora', 'streaming', 'gaming'], imagen: 'capturadora-hd60.jpg' },
+  { id: 98, nombre: 'Green Screen Portátil', categoria: 'Streaming', precio: 80, tags: ['green_screen', 'streaming', 'chroma'], imagen: 'green-screen.jpg' },
+  { id: 99, nombre: 'Brazo Micrófono Boom', categoria: 'Streaming', precio: 50, tags: ['brazo', 'micrófono', 'streaming'], imagen: 'brazo-microfono.jpg' },
+  { id: 100, nombre: 'Panel Acústico Pack 12', categoria: 'Streaming', precio: 60, tags: ['acústico', 'insonorización', 'streaming'], imagen: 'panel-acustico.jpg' },
+];
+
+export const CATEGORIAS = [...new Set(PRODUCTOS.map(p => p.categoria))];
+
+export const EMOJI_CATEGORIAS = {
+  'Electrónica': '💻',
+  'Periféricos': '🖱️',
+  'Audio': '🎧',
+  'Almacenamiento': '💾',
+  'Muebles': '🪑',
+  'Iluminación': '💡',
+  'Fotografía': '📷',
+  'Streaming': '🎥'
+};
