@@ -1,205 +1,329 @@
 // src/utils/RedNeuronal.js
+// Sistema de Recomendación con TensorFlow.js - Red Neuronal Artificial
 
-import { PRODUCTOS, CATEGORIAS } from './productos';
+import * as tf from "@tensorflow/tfjs";
+import { PRODUCTOS, CATEGORIAS } from "./productos";
 
 class RedNeuronalRecomendacion {
   constructor() {
-    this.pesos = this.inicializarPesos();
+    this.modelo = null;
     this.historialEntrenamiento = [];
     this.generacion = 0;
-    this.tasaAprendizaje = 0.1;
+    this.categoriaToIndex = {};
+    this.todosLosTags = new Set();
+    this.inicializarMappings();
+    this.crearModelo();
   }
 
-  inicializarPesos() {
-    const pesos = {};
-    CATEGORIAS.forEach(cat => {
-      pesos[cat] = Math.random() * 0.5 + 0.5;
+  inicializarMappings() {
+    // Crear mapeo de categorías a índices
+    CATEGORIAS.forEach((cat, idx) => {
+      this.categoriaToIndex[cat] = idx;
     });
-    // Pesos adicionales para patrones de compra
-    pesos.precioPromedio = 0;
-    pesos.diversidad = 0.5;
-    return pesos;
+
+    // Recolectar todos los tags únicos del catálogo
+    PRODUCTOS.forEach((p) => {
+      p.tags.forEach((tag) => this.todosLosTags.add(tag));
+    });
+    this.todosLosTags = Array.from(this.todosLosTags);
   }
 
-  sigmoid(x) {
-    return 1 / (1 + Math.exp(-x));
+  crearModelo() {
+    // Crear red neuronal con TensorFlow.js
+    // Arquitectura: Input -> Dense(32) -> Dropout -> Dense(16) -> Dense(1)
+    this.modelo = tf.sequential({
+      layers: [
+        // Capa de entrada: features normalizadas del producto
+        tf.layers.dense({
+          inputShape: [CATEGORIAS.length + this.todosLosTags.length + 3], // categorías + tags + 3 features de precio
+          units: 32,
+          activation: "relu",
+          kernelInitializer: "heNormal",
+        }),
+        // Dropout para evitar overfitting
+        tf.layers.dropout({ rate: 0.2 }),
+        // Capa oculta
+        tf.layers.dense({
+          units: 16,
+          activation: "relu",
+          kernelInitializer: "heNormal",
+        }),
+        // Capa de salida: score de recomendación (0-1)
+        tf.layers.dense({
+          units: 1,
+          activation: "sigmoid",
+        }),
+      ],
+    });
+
+    // Compilar modelo con optimizador Adam y función de pérdida MSE
+    this.modelo.compile({
+      optimizer: tf.train.adam(0.001),
+      loss: "meanSquaredError",
+      metrics: ["accuracy"],
+    });
+
+    console.log("🧠 Red Neuronal creada con TensorFlow.js");
+    this.modelo.summary();
   }
 
-  calcularScore(producto, historialUsuario) {
+  extraerFeatures(producto, historialUsuario) {
+    // Vector de features para el producto
+    const features = [];
+
+    // 1. One-hot encoding de categorías (7 features)
+    CATEGORIAS.forEach((cat) => {
+      features.push(producto.categoria === cat ? 1 : 0);
+    });
+
+    // 2. One-hot encoding de tags (features dinámicas)
+    this.todosLosTags.forEach((tag) => {
+      features.push(producto.tags.includes(tag) ? 1 : 0);
+    });
+
     if (historialUsuario.length === 0) {
-      return Math.random() * 0.3; // Score bajo inicial
+      // 3. Features de precio normalizadas (sin historial)
+      features.push(producto.precio / 2500); // Normalizar por precio máximo ~2500
+      features.push(0.5); // Diferencia de precio promedio
+      features.push(0.5); // Rango de precio
+    } else {
+      // 3. Features de precio basadas en historial
+      const preciosComprados = historialUsuario.map((h) => h.precio);
+      const precioPromedio =
+        preciosComprados.reduce((a, b) => a + b, 0) / preciosComprados.length;
+      const precioMin = Math.min(...preciosComprados);
+      const precioMax = Math.max(...preciosComprados);
+
+      features.push(producto.precio / 2500); // Precio normalizado
+      features.push(Math.abs(producto.precio - precioPromedio) / 2500); // Diferencia de precio
+      features.push(
+        producto.precio >= precioMin && producto.precio <= precioMax ? 1 : 0
+      ); // En rango
     }
 
-    let score = 0;
-    
-    // Factor 1: Categoría similar (peso adaptativo)
-    const categoriasCompradas = historialUsuario.map(h => h.categoria);
-    const frecuenciaCategoria = categoriasCompradas.filter(c => c === producto.categoria).length;
-    const porcentajeCategoria = frecuenciaCategoria / historialUsuario.length;
-    score += porcentajeCategoria * (this.pesos[producto.categoria] || 0.5) * 3;
-
-    // Factor 2: Rango de precio similar (mejorado)
-    const preciosComprados = historialUsuario.map(h => h.precio);
-    const precioPromedio = preciosComprados.reduce((a, b) => a + b, 0) / preciosComprados.length;
-    const precioMin = Math.min(...preciosComprados);
-    const precioMax = Math.max(...preciosComprados);
-    
-    // Preferencia por productos en el rango de precio del usuario
-    if (producto.precio >= precioMin && producto.precio <= precioMax * 1.2) {
-      score += 1.5;
-    }
-    
-    const diferenciaPrecio = Math.abs(producto.precio - precioPromedio) / (precioPromedio || 1);
-    score += (1 - Math.min(diferenciaPrecio, 1)) * 2;
-
-    // Factor 3: Tags compartidos (mejorado)
-    const tagsComprados = new Set(historialUsuario.flatMap(h => h.tags));
-    const tagsCompartidos = producto.tags.filter(tag => tagsComprados.has(tag)).length;
-    const porcentajeTags = tagsCompartidos / producto.tags.length;
-    score += porcentajeTags * 2.5;
-
-    // Factor 4: Diversidad (evitar repetir productos muy similares)
-    const productosCategoria = historialUsuario.filter(h => h.categoria === producto.categoria);
-    if (productosCategoria.length > historialUsuario.length * 0.5) {
-      score *= (1 - this.pesos.diversidad * 0.3);
-    }
-
-    // Factor 5: Tendencia temporal (productos recientes tienen más peso)
-    const comprasRecientes = historialUsuario.slice(-3);
-    const esCategoriaTendencia = comprasRecientes.some(h => h.categoria === producto.categoria);
-    if (esCategoriaTendencia) {
-      score += 1.2;
-    }
-
-    // Aplicar función de activación
-    return this.sigmoid(score);
+    return features;
   }
 
-  entrenar(historialUsuario) {
+  async entrenar(historialUsuario) {
     if (historialUsuario.length === 0) return;
 
     this.generacion++;
-    
-    // Analizar patrones de compra
-    const categoriasCompradas = historialUsuario.map(h => h.categoria);
-    const frecuencias = {};
-    
-    categoriasCompradas.forEach(cat => {
-      frecuencias[cat] = (frecuencias[cat] || 0) + 1;
+    console.log(`🎓 Entrenando red neuronal - Generación #${this.generacion}`);
+
+    // Generar datos de entrenamiento
+    const datosEntrenamiento = [];
+    const labels = [];
+
+    PRODUCTOS.forEach((producto) => {
+      const features = this.extraerFeatures(producto, historialUsuario);
+      datosEntrenamiento.push(features);
+
+      // Label: 1 si el producto fue comprado, 0 si no
+      const fueComprado = historialUsuario.some((h) => h.id === producto.id);
+
+      // Calcular score basado en similitud con historial
+      let score = fueComprado ? 1 : 0;
+
+      if (!fueComprado) {
+        // Calcular similitud para productos no comprados
+        const categoriasCompradas = historialUsuario.map((h) => h.categoria);
+        const mismaCategoria = categoriasCompradas.includes(producto.categoria);
+        const frecuenciaCategoria = categoriasCompradas.filter(
+          (c) => c === producto.categoria
+        ).length;
+
+        const tagsComprados = new Set(historialUsuario.flatMap((h) => h.tags));
+        const tagsComunes = producto.tags.filter((tag) =>
+          tagsComprados.has(tag)
+        ).length;
+
+        // Score entre 0-0.7 para productos similares no comprados
+        score = Math.min(
+          (frecuenciaCategoria / historialUsuario.length) * 0.4 +
+            (tagsComunes / Math.max(producto.tags.length, 1)) * 0.3,
+          0.7
+        );
+      }
+
+      labels.push(score);
     });
 
-    // Ajustar pesos según frecuencia de compra
-    Object.keys(frecuencias).forEach(cat => {
-      const factor = frecuencias[cat] / historialUsuario.length;
-      const ajuste = factor * this.tasaAprendizaje;
-      
-      // Incrementar peso de categorías populares
-      this.pesos[cat] = Math.min(this.pesos[cat] + ajuste, 2.5);
-      
-      // Decrementar levemente otras categorías para balancear
-      CATEGORIAS.forEach(otraCat => {
-        if (otraCat !== cat && !frecuencias[otraCat]) {
-          this.pesos[otraCat] = Math.max(this.pesos[otraCat] - ajuste * 0.1, 0.3);
-        }
-      });
+    // Convertir a tensores
+    const xs = tf.tensor2d(datosEntrenamiento);
+    const ys = tf.tensor2d(labels, [labels.length, 1]);
+
+    // Entrenar el modelo
+    const history = await this.modelo.fit(xs, ys, {
+      epochs: 20,
+      batchSize: 32,
+      shuffle: true,
+      verbose: 0,
+      callbacks: {
+        onEpochEnd: (epoch, logs) => {
+          if (epoch % 5 === 0) {
+            console.log(`  Época ${epoch}: loss = ${logs.loss.toFixed(4)}`);
+          }
+        },
+      },
     });
 
-    // Calcular precio promedio del usuario
-    const precios = historialUsuario.map(h => h.precio);
-    this.pesos.precioPromedio = precios.reduce((a, b) => a + b, 0) / precios.length;
+    // Limpiar tensores
+    xs.dispose();
+    ys.dispose();
 
-    // Ajustar diversidad según variedad de compras
-    const categoriasUnicas = new Set(categoriasCompradas).size;
-    this.pesos.diversidad = categoriasUnicas / CATEGORIAS.length;
-
-    // Guardar en historial de entrenamiento
+    // Guardar estadísticas de entrenamiento
     this.historialEntrenamiento.push({
       generacion: this.generacion,
       numCompras: historialUsuario.length,
-      pesos: { ...this.pesos },
-      timestamp: Date.now()
+      loss: history.history.loss[history.history.loss.length - 1],
+      timestamp: Date.now(),
     });
+
+    console.log(
+      `✅ Entrenamiento completado - Loss final: ${history.history.loss[
+        history.history.loss.length - 1
+      ].toFixed(4)}`
+    );
   }
 
-  recomendar(historialUsuario, n = 6) {
+  async recomendar(historialUsuario, n = 6) {
     // Filtrar productos ya comprados
     const productosNoComprados = PRODUCTOS.filter(
-      p => !historialUsuario.find(h => h.id === p.id)
+      (p) => !historialUsuario.find((h) => h.id === p.id)
     );
 
-    // Calcular scores para todos los productos
-    const recomendaciones = productosNoComprados.map(producto => ({
-      ...producto,
-      score: this.calcularScore(producto, historialUsuario),
-      razon: this.obtenerRazonRecomendacion(producto, historialUsuario)
-    }));
+    // Extraer features y hacer predicciones con la red neuronal
+    const recomendacionesConScore = [];
 
-    // Ordenar por score
-    const mejoresRecomendaciones = recomendaciones
-      .sort((a, b) => b.score - a.score);
+    for (const producto of productosNoComprados) {
+      const features = this.extraerFeatures(producto, historialUsuario);
 
-    // Aplicar diversidad: no recomendar solo de una categoría
+      // Hacer predicción con TensorFlow.js
+      const tensorInput = tf.tensor2d([features]);
+      const prediccion = this.modelo.predict(tensorInput);
+      const score = (await prediccion.data())[0];
+
+      // Limpiar tensores
+      tensorInput.dispose();
+      prediccion.dispose();
+
+      recomendacionesConScore.push({
+        ...producto,
+        score: score,
+        razon: this.obtenerRazonRecomendacion(producto, historialUsuario),
+      });
+    }
+
+    // Ordenar por score descendente
+    recomendacionesConScore.sort((a, b) => b.score - a.score);
+
+    // Aplicar diversidad: balancear categorías
     const recomendacionesBalanceadas = [];
-    const categoriasUsadas = new Set();
-    
-    for (const rec of mejoresRecomendaciones) {
-      // Siempre agregar si es de categoría nueva o ya tenemos pocas recomendaciones
-      if (!categoriasUsadas.has(rec.categoria) || recomendacionesBalanceadas.length < 3) {
+    const categoriasUsadas = new Map();
+
+    for (const rec of recomendacionesConScore) {
+      const countCategoria = categoriasUsadas.get(rec.categoria) || 0;
+
+      // Permitir hasta 2 productos por categoría en las primeras recomendaciones
+      if (countCategoria < 2 || recomendacionesBalanceadas.length >= n / 2) {
         recomendacionesBalanceadas.push(rec);
-        categoriasUsadas.add(rec.categoria);
-      } else if (recomendacionesBalanceadas.length < n) {
-        // Agregar productos adicionales con un threshold mínimo de score
-        if (rec.score > 0.4) {
-          recomendacionesBalanceadas.push(rec);
-        }
+        categoriasUsadas.set(rec.categoria, countCategoria + 1);
       }
-      
+
       if (recomendacionesBalanceadas.length >= n) break;
     }
 
     // Si no hay suficientes, completar con las mejores opciones
     if (recomendacionesBalanceadas.length < n) {
-      const faltantes = mejoresRecomendaciones
-        .filter(r => !recomendacionesBalanceadas.find(rb => rb.id === r.id))
+      const faltantes = recomendacionesConScore
+        .filter((r) => !recomendacionesBalanceadas.find((rb) => rb.id === r.id))
         .slice(0, n - recomendacionesBalanceadas.length);
       recomendacionesBalanceadas.push(...faltantes);
     }
+
+    console.log(
+      `🎯 Top 3 recomendaciones:`,
+      recomendacionesBalanceadas
+        .slice(0, 3)
+        .map((r) => `${r.nombre} (score: ${r.score.toFixed(3)})`)
+    );
 
     return recomendacionesBalanceadas.slice(0, n);
   }
 
   obtenerRazonRecomendacion(producto, historial) {
-    if (historial.length === 0) return 'Producto popular';
-    
-    const categoriasCompradas = historial.map(h => h.categoria);
+    if (historial.length === 0) return "Producto destacado";
+
+    const categoriasCompradas = historial.map((h) => h.categoria);
     const hayCategoria = categoriasCompradas.includes(producto.categoria);
-    
+
     if (hayCategoria) {
-      return `Basado en tus compras de ${producto.categoria}`;
+      const frecuencia = categoriasCompradas.filter(
+        (c) => c === producto.categoria
+      ).length;
+      if (frecuencia >= 2) {
+        return `🎯 Basado en tus ${frecuencia} compras de ${producto.categoria}`;
+      }
+      return `Basado en tu interés en ${producto.categoria}`;
     }
-    
-    const tagsComprados = new Set(historial.flatMap(h => h.tags));
-    const tagsComunes = producto.tags.filter(tag => tagsComprados.has(tag));
-    
+
+    const tagsComprados = new Set(historial.flatMap((h) => h.tags));
+    const tagsComunes = producto.tags.filter((tag) => tagsComprados.has(tag));
+
     if (tagsComunes.length > 0) {
-      return `Coincide con tus intereses: ${tagsComunes[0]}`;
+      return `✨ Coincide con tus intereses: ${tagsComunes
+        .slice(0, 2)
+        .join(", ")}`;
     }
-    
-    return 'Recomendado para ti';
+
+    return "🌟 Recomendado por IA";
   }
 
   obtenerEstadisticas() {
     return {
       generacion: this.generacion,
-      pesos: { ...this.pesos },
-      historialEntrenamiento: this.historialEntrenamiento
+      historialEntrenamiento: this.historialEntrenamiento,
+      numCapas: this.modelo.layers.length,
+      parametros: this.modelo.countParams(),
     };
   }
 
-  reiniciar() {
-    this.pesos = this.inicializarPesos();
+  async reiniciar() {
+    // Liberar memoria del modelo anterior
+    if (this.modelo) {
+      this.modelo.dispose();
+    }
+
+    // Recrear modelo
     this.historialEntrenamiento = [];
     this.generacion = 0;
+    this.crearModelo();
+
+    console.log("🔄 Red neuronal reiniciada");
+  }
+
+  // Método para guardar el modelo (opcional)
+  async guardarModelo() {
+    try {
+      await this.modelo.save("localstorage://modelo-recomendacion");
+      console.log("💾 Modelo guardado en LocalStorage");
+    } catch (error) {
+      console.error("Error guardando modelo:", error);
+    }
+  }
+
+  // Método para cargar el modelo (opcional)
+  async cargarModelo() {
+    try {
+      this.modelo = await tf.loadLayersModel(
+        "localstorage://modelo-recomendacion"
+      );
+      console.log("📂 Modelo cargado desde LocalStorage");
+      return true;
+    } catch (error) {
+      console.log("No hay modelo guardado, usando modelo nuevo");
+      return false;
+    }
   }
 }
 
