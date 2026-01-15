@@ -1,7 +1,7 @@
 // src/components/Navigation.jsx
 
 import React from "react";
-import { BarChart3 } from "lucide-react";
+import { BarChart3, Activity } from "lucide-react";
 
 const Navigation = ({ vistaActual, onCambiarVista }) => {
   const opciones = [
@@ -9,6 +9,7 @@ const Navigation = ({ vistaActual, onCambiarVista }) => {
     { id: "recomendaciones", label: "Recomendaciones IA", icono: null },
     { id: "historial", label: "Mis Compras", icono: null },
     { id: "graficas", label: "Gráficas", icono: BarChart3 },
+    { id: "metricas", label: "Métricas", icono: Activity },
   ];
 
   return (

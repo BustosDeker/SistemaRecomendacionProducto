@@ -13,6 +13,7 @@ import Recomendaciones from "./views/Recomendaciones";
 import Historial from "./views/Historial";
 import Carrito from "./views/Carrito";
 import Graficas from "./views/Graficas";
+import Metricas from "./views/Metricas";
 
 // Importar utilidades
 import RedNeuronalRecomendacion from "./utils/RedNeuronal";
@@ -283,6 +284,14 @@ export default function App() {
 
         {vistaActual === "graficas" && (
           <Graficas historialCompras={historialCompras} />
+        )}
+
+        {vistaActual === "metricas" && (
+          <Metricas
+            historialCompras={historialCompras}
+            recomendaciones={recomendaciones}
+            estadisticasIA={estadisticasIA}
+          />
         )}
 
         {vistaActual === "carrito" && (
