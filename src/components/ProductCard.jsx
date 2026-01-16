@@ -8,16 +8,10 @@ const ProductCard = ({ producto, onAddToCart, onBuyNow }) => {
   const [imagenCargada, setImagenCargada] = useState(true);
   const [imagenError, setImagenError] = useState(false);
 
-  // Función para obtener la ruta de la imagen
   const obtenerRutaImagen = () => {
-    try {
-      // Intenta cargar desde la carpeta img en src
-      return new URL(`../img/${producto.imagen}`, import.meta.url).href;
-    } catch (error) {
-      console.warn(`No se pudo cargar la imagen: ${producto.imagen}`);
-      return null;
-    }
+    return producto.imagen;
   };
+
 
   const handleImagenError = () => {
     console.error(`Error al cargar imagen: ${producto.imagen}`);
